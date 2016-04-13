@@ -1,0 +1,12 @@
+Pre_Spikes = find(look>Threshold);
+Spikes = [];
+tic
+for i = 2: length(Pre_Spikes)
+    if look(Pre_Spikes(i)-1)>Threshold
+        continue
+    elseif look(Pre_Spikes(i)-1)<Threshold && look(Pre_Spikes(i))>Threshold
+        Spikes = [Spikes; look(Pre_Spikes(i))];
+    end
+end
+toc
+
