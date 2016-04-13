@@ -1,0 +1,20 @@
+%%
+%Waveform extraction
+
+Waveforms_Spikes = nan(30,4,length(s)); %create a matrix that has a 30x4xSpikes appearance 
+Spike_values = [s look(s)];% Make a Matrix with index number and values of spikes at the time of crossing
+
+
+for i = 1:length(s)%go through all spikes and put them in the mentioned matrix
+
+    Waveforms_Spikes(:,:,i) = look(s(i):s(i)+29,:);
+    
+end
+
+figure
+hold on
+
+for j = 1:length(s)%plot the first 100 spikes(so this should say 100, but in dummy data we have less than 100 spikes so matlab crashes, if you type in 100) 
+   plot(Waveforms_Spikes(:,:,j)) 
+end
+hold off
