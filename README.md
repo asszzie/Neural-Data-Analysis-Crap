@@ -14,8 +14,12 @@ for i=1:4
 end
 
 %% BUTTERWORTH FILTER
-Lpass = 300
-Hpass = 3000
-nfBand=[Lpass/(Fs/2),Hstop/(Fs/2)]
-[b,a] = butter(8, nfBand, 'bandpass')
+Lpass = 300;
+Hpass = 3000;
+%normalize the frequencies
+nfBand=[Lpass/(samplingRate/2),Hpass/(samplingRate/2)];
+%%
+[b,a] = butter(6, nfBand, 'bandpass')
+h=fvtool(b,a)
+
 
