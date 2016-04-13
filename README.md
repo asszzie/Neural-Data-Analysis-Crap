@@ -20,6 +20,12 @@ Hpass = 3000;
 nfBand=[Lpass/(samplingRate/2),Hpass/(samplingRate/2)];
 %%
 [b,a] = butter(6, nfBand, 'bandpass')
+x=gain*double(x);
+xx = x([1000:20000],1)
+freqz(filtfilt(b,a,xx))
+
+%%
 h=fvtool(b,a)
+
 
 
