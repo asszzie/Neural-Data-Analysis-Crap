@@ -1,0 +1,44 @@
+%%
+%detect threshold
+
+
+s = [];%create an empty matrix for storage of merged Spikes
+Number_of_electrodes = size(look); %find size of array
+Threshold = -53.965100102164320;%Use real threshold here
+Spikes = zeros(Number_of_electrodes(1,1), Number_of_electrodes(1,2));%create an array with zeros matching the dimensions of the data matrix
+
+
+
+for j = 1:Number_of_electrodes(1,2) %go through all four channels
+    Pre_Spikes = find(look(:,j)<=Threshold); %find over threshold indices
+    for i = 1: length(Pre_Spikes)%go through the whole crossing for one channel
+        if i == 1
+            Spikes(Pre_Spikes(i),j) = 1; %put the information of a crossing in a file
+        elseif look(Pre_Spikes(i)-1)>Threshold && look(Pre_Spikes(i))<Threshold %check that there is only one crossing per 
+            Spikes(Pre_Spikes(i),j) = 1; %put the information of a crossing in a file
+        end
+    end
+end
+
+%So essentially, if you want to go back to the individual arrays
+%you have to replace the one above with the i (so the loop number), then
+%you should get a matrix with the index values for each spike (that is
+%valid) and can use it for plotting (See plotting command below).
+
+%If you do so, the for loop below won't work anymore, because it uses the
+%Matrix generated. Moreover you need to get rid of all the zeros inbetween
+%the indices (e.g. by replacing them with nan's).
+
+
+for g = 1:length(Spikes)%go through the file with the crossings for all four channels
+    if sum(Spikes(g,:)) > 0%see if the sum is bigger then zero (at least one crossing)
+        s = [s; g];%if so, put the index in a seperate file
+        Spikes(g+1:g+3,:) = 0; %and delete possible other crossings in the other channels to exclude double counting
+    end
+end
+
+Returnmatrix = [s s/samplingRate]; %Generate Matrix to return
+
+% plot(look,'k')
+% hold on
+% plot(Spikes, look(Spikes), 'ro')
