@@ -12,3 +12,10 @@ fBand=[Lpass/(Fs/2),Hstop/(Fs/2)];
 for i=1:4
     y(:,i)=filtfilt(b,a,x(:,i)); % zero-phase delay correction
 end
+
+%% BUTTERWORTH FILTER
+Lpass = 300
+Hpass = 3000
+nfBand=[Lpass/(Fs/2),Hstop/(Fs/2)]
+[b,a] = butter(8, nfBand, 'bandpass')
+
