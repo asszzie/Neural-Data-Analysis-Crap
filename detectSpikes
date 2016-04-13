@@ -1,0 +1,16 @@
+function [s, t] = detectSpikes(x, Fs)
+% Detect spikes.
+%   [s, t] = detectSpikes(x, Fs) detects spikes in x, where Fs the sampling
+%   rate (in Hz). The outputs s and t are column vectors of spike times in
+%   samples and ms, respectively. By convention the time of the zeroth
+%   sample is 0 ms.
+sigma=median(abs(x)./0.6745);
+u=0;
+for i =1:4
+while touch != 0
+    Lower=size(x(x<-i*sigma(i)));
+    touch=Lower(1);
+    u=u+1;
+end
+ThreLower(i)=-u/2*sigma(i);
+end
