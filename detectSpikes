@@ -5,10 +5,11 @@ function [s, t] = detectSpikes(x, Fs)
 %   samples and ms, respectively. By convention the time of the zeroth
 %   sample is 0 ms.
 sigma=median(abs(x)./0.6745);
-u=0;
 for i =1:4
+    Lower=[1,1];
+    u=2;
 while Lower(1)~= 0
-    Lower=size(x(x<-(u+2)*sigma(i)));
+    Lower=size(x(x<-(u)*sigma(i)));
     u=u+1;
 end
 ThreLower(i)=-u/2*sigma(i);
