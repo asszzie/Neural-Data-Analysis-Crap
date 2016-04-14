@@ -2,6 +2,7 @@
 xx=(x([10000:60000],:));
 xx  = gain * double(xx);
 %% Toy filtering
+Fs=samplingRate;
 Lpass=300;
 Hstop=3000;
 fBand=[Lpass/(Fs/2),Hstop/(Fs/2)];% normalization of frequency limits
@@ -25,20 +26,35 @@ residual(residual<0)=-1;
 residual(residual>0)=1;
 re1=[residual;zeros(1,4)];
 re2=[zeros(1,4);residual];
-cross=re1-re2;
+cross=re2-re1;
 spikes=[xx;zeros(1,4)];
 spikes(cross<=0)=0;
 spikes(50002,:)=[];
+%%
+Tag=[find(spikes(:,1)<0);find(spikes(:,2)<0);find(spikes(:,3)<0);find(spikes(:,4)<0)];
+for ti=1:length(Tag)
+    waveform(:,:,ti)=xx([Tag(ti):Tag(ti)+29],:);
+end
+TAG=unique(Tag);
 %% Julian's method for spikes detection
 N_elec=size(xx); %determinethe size of the input data
 Spikes = zeros(N_elec(1), N_elec(2));%create an array with zeros matching the dimensions of the data matrix
 for j = 1:N_elec(2) %go through all four channels
     Pre_Spikes = find(xx(:,j)<=Thre(j)); %find over threshold indices
-    for u = 1: length(Pre_Spikes)%go through the whole crossing for one channel
-        if u == 1
-            Spikes(Pre_Spikes(u),j) = 1; %put the information of a crossing in a file
-        elseif xx(Pre_Spikes(u)-1)>Thre(j) && xx(Pre_Spikes(u))<Thre(j) %check that there is only one crossing per 
+    Spikes(Pre_Spikes(1),j)=1;
+    for u = 2: length(Pre_Spikes)%go through the whole crossing for one channel
+        if xx(Pre_Spikes(u)-1,j)<Thre(j) %check that there is only one crossing per 
             Spikes(Pre_Spikes(u),j) = 1; %put the information of a crossing in a file
         end
     end
+end
+%% waveform extraction and spike alignment
+Tag=[find(spikes(:,1)<0);find(spikes(:,2)<0);find(spikes(:,3)<0);find(spikes(:,4)<0)];
+TAG=unique(Tag)
+for ti=1:length(TAG)
+    peakfind=xx([TAG(ti):TAG(ti)+29]);
+    waveform(:,:,ti)=xx([TAG(ti)+find(peakfind==min(peakfind))-15:TAG(ti)+find(peakfind==min(peakfind))+14]);
+    plot(waveform(:,:,ti))
+    hold on
+    drawnow
 end
