@@ -19,17 +19,20 @@ Number_of_electrodes = size(look); %find size of array
 Spikes = zeros(Number_of_electrodes(1,1), Number_of_electrodes(1,2));%create an array with zeros matching the dimensions of the data matrix
 
 
+Blub = nan(700,4);
 
 for j = 1:Number_of_electrodes(1,2) %go through all four channels
-    Pre_Spikes = find(look(:,j)<=Threshold(j)); %find over threshold indices
+Pre_Spikes = find(look(:,j)<Threshold(j)); %find under threshold indices
+
     for i = 1: length(Pre_Spikes)%go through the whole crossing for one channel
         if i == 1
             Spikes(Pre_Spikes(i),j) = 1; %put the information of a crossing in a file
-        elseif look(Pre_Spikes(i)-1)>Threshold(j) && look(Pre_Spikes(i))<Threshold(j) %check that there is only one crossing per 
+        elseif look(Pre_Spikes(i)-1,j)>Threshold(j) && look(Pre_Spikes(i),j)<Threshold(j) %check that there is only one crossing per 
             Spikes(Pre_Spikes(i),j) = 1; %put the information of a crossing in a file
         end
     end
 end
+
 
 %So essentially, if you want to go back to the individual arrays
 %you have to replace the one above with the i (so the loop number), then
@@ -53,3 +56,4 @@ Returnmatrix = [s s/samplingRate]; %Generate Matrix to return
 % plot(look,'k')
 % hold on
 % plot(Spikes, look(Spikes), 'ro')
+
