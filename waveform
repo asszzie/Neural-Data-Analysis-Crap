@@ -1,0 +1,13 @@
+function w = extractWaveforms(x, s)
+% Extract spike waveforms.
+%   w = extractWaveforms(x, s) extracts the waveforms at times s (given in
+%   samples) from the filtered signal x using a fixed window around the
+%   times of the spikes. The return value w is a 3d array of size
+%   length(window) x #spikes x #channels.
+s=unique(s); % the two lines here is used to merge the repeated data
+s(find(diff(s)<30))=[];
+for i=1:length(s)
+d(:,i)=[s(i)-14:1:s(i)+15];
+end
+ind=reshape(d,30*length(d),1);
+w=permute(reshape(x(ind,:)',30,length(d),4),[2,1,3]);
