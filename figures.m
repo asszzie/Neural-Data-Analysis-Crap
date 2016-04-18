@@ -178,9 +178,11 @@ end
 %-------------figure 3a: the 100 first spikes--------------
 figure
 hold on
-
+wave=reshape(permute(w,[2,1,3]),30,55909*4);
 for j = 1:100 %plot the first 100 spikes.
-   plot(Waveforms_Spikes(:,:,j)) 
+   plot(wave(:,j))
+   hold on
+   drawnow update
 end
 title('Waveform of the Hunderd First Spikes (x-axis corresponds to 1 ms) \newlineAll channels', 'FontSize',16)
 xlabel('Samples','FontSize',11)
